@@ -5,11 +5,13 @@ import InputSearch from '../../../components/inputSearch';
 import styles from './content.module.sass';
 import cn from 'classnames'
 import InputRange from '../../../components/inputRange';
+import InfiniteScroll from 'react-infinite-scroll-component';
 
 const Content = () => {
+    const [page, setPage] = useState(1)
     const [filter, setFilter] = useState({
-        page: 1,
-        pageSize: 10,
+        page: page,
+        pageSize: 4,
         // symbol: "",
         // name: "",
         // status: "SOLD_OUT",
@@ -23,7 +25,8 @@ const Content = () => {
     const [symbol, setSymbol] = useState()
     const [status, setStatus] = useState()
     const [valuesTotal, setValuesTotal] = useState([100, 200]);
-    const [valuesPersonal, setValuesPersonal] = useState([0.07,0.08]);
+    const [valuesPersonal, setValuesPersonal] = useState([0.07, 0.08]);
+    const [hashMore, sethashMore] = useState(true)
 
     useEffect(() => {
         getDataTransaction()
@@ -32,8 +35,11 @@ const Content = () => {
     const getDataTransaction = () => {
         getData(filter).then(res => {
             if (res?.data?.message === 'SUCCESS') {
-                setData(res?.data?.data?.fundProjects);
+                setData(data => [...data, ...res?.data?.data?.fundProjects]);
                 setTotal(res?.data?.data?.totalRecords)
+                if(data.length===total){
+                    sethashMore(false)
+                }
             }
         })
     }
@@ -70,6 +76,14 @@ const Content = () => {
         setStatus('')
     }
 
+    const loadData = () => {
+        setPage(page=> page+1)
+        setFilter({
+            ...filter,
+            page: page+1
+        })
+       
+    }
 
     return (
         <div>
@@ -103,18 +117,18 @@ const Content = () => {
                             <InputRange
                                 values={valuesTotal}
                                 setValues={setValuesTotal}
-                                STEP= {10}
-                                MIN = {0}
-                                MAX = {1000}
+                                STEP={10}
+                                MIN={0}
+                                MAX={1000}
                             />
                         </div>
                         <div className={styles.range}>
                             <InputRange
                                 values={valuesPersonal}
                                 setValues={setValuesPersonal}
-                                STEP= {0.01}
-                                MIN = {0}
-                                MAX = {0.1}
+                                STEP={0.01}
+                                MIN={0}
+                                MAX={0.1}
                             />
                         </div>
                     </div>
@@ -135,15 +149,28 @@ const Content = () => {
                     </button>
                 </div>
             </div>
-            <div className={styles.container}>
-                {
-                    data.map(item => {
-                        return (
-                            <Card data={item} />
-                        )
-                    })
-                }
-            </div>
+            <InfiniteScroll
+                dataLength={data.length}
+                next={loadData}
+                hasMore={hashMore}
+                loader={<h4>Loading...</h4>}
+                endMessage={
+                    <p style={{ textAlign: "center" }}>
+                      <b>Yay! You have seen it all</b>
+                    </p>
+                  }
+            >
+                <div className={styles.container}>
+                    {
+                        data.map(item => {
+                            return (
+                                <Card data={item} />
+                            )
+                        })
+                    }
+
+                </div>
+            </InfiniteScroll>
         </div>
     )
 }

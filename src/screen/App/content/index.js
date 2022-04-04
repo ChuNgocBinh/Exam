@@ -56,6 +56,8 @@ const Content = () => {
     }
 
     const handleSubmit = () => {
+        setData([])
+        setPage(1)
         setFilter({
             page: 1,
             pageSize: 4,

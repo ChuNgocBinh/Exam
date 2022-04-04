@@ -2,14 +2,14 @@ import React, { useState } from "react";
 import { Range, getTrackBackground } from "react-range";
 import styles from './inputRange.module.sass';
 
-const InputRange = ({ values, setValues, MIN, MAX, STEP }) => {
+const InputRange = ({ values, setValues, MIN, MAX, STEP, title }) => {
     // const STEP = 1;
     // const MIN = 10;
     // const MAX = 100;
 
     return (
         <div>
-            <label className="label">Total Raise</label>
+            <label className="label">{title}</label>
             <div className={styles.range}>
                 <Range
                     values={values}

@@ -70,6 +70,7 @@ const Content = () => {
     const handleCancel = () => {
         setData([])
         setPage(1)
+        sethashMore(true)
         setFilter({
             page: 1,
             pageSize: 4,
@@ -123,6 +124,7 @@ const Content = () => {
                                 STEP={10}
                                 MIN={0}
                                 MAX={1000}
+                                title='Total Raise'
                             />
                         </div>
                         <div className={styles.range}>
@@ -132,6 +134,7 @@ const Content = () => {
                                 STEP={0.01}
                                 MIN={0}
                                 MAX={0.1}
+                                title='Personal Allocation'
                             />
                         </div>
                     </div>

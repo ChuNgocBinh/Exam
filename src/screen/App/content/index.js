@@ -43,6 +43,7 @@ const Content = () => {
             }
         })
     }
+    console.log(total)
 
     const onChangeName = (e) => {
         setName(e.target.value)
@@ -57,7 +58,7 @@ const Content = () => {
     const handleSubmit = () => {
         setFilter({
             page: 1,
-            pageSize: 10,
+            pageSize: 4,
             symbol: symbol,
             name: name,
             status: status,
@@ -67,9 +68,11 @@ const Content = () => {
     }
 
     const handleCancel = () => {
+        setData([])
+        setPage(1)
         setFilter({
             page: 1,
-            pageSize: 10,
+            pageSize: 4,
         })
         setName('')
         setSymbol('')
